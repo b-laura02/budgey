@@ -1,4 +1,4 @@
-package hu.blaura.budgey;
+package hu.blaura.Budgey;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

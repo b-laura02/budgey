@@ -1,4 +1,4 @@
-package hu.blaura.budgey;
+package hu.blaura.Budgey;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
