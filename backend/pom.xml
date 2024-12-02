@@ -11,7 +11,7 @@
 	<groupId>hu.blaura</groupId>
 	<artifactId>Budgey</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Budgey</name>
+	<name>budgey</name>
 	<description>Budgey backend</description>
 	<url/>
 	<licenses>
@@ -38,6 +38,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
