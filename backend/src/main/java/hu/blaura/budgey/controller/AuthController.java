@@ -1,5 +1,6 @@
 package hu.blaura.budgey.controller;
 
+import hu.blaura.budgey.model.dto.AuthResponseDto;
 import hu.blaura.budgey.model.dto.LoginDto;
 import hu.blaura.budgey.model.dto.RegisterDto;
 import hu.blaura.budgey.service.AuthService;
@@ -19,11 +20,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
+    public ResponseEntity<AuthResponseDto> register(@RequestBody RegisterDto registerDto){
         return ResponseEntity.ok().body(authService.register(registerDto)); //sablon hivasa
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto){
         //return ResponseEntity.badRequest().body("Rossz jelszó"); rossz jelszo eseten elm. 404
         return ResponseEntity.ok().body(authService.login(loginDto));
 
