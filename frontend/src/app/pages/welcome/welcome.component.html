@@ -1,35 +1,6 @@
-  <body color="primary">
-  
-    <mat-toolbar color="secondary" class="flex justify-between">
-      <span class="text-lg font-semibold">Budgey</span>
-      <div class="flex space-x-4">
-        <mat-menu #menu1="matMenu" class="text-center">
-          <button mat-menu-item>Menü 1 opció 1</button>
-          <button mat-menu-item>Menü 1 opció 2</button>
-        </mat-menu>
-        <button mat-button [matMenuTriggerFor]="menu1">Menü 1</button>
-  
-        <mat-menu #menu2="matMenu" class="text-center">
-          <button mat-menu-item>Menü 2 opció 1</button>
-          <button mat-menu-item>Menü 2 opció 2</button>
-        </mat-menu>
-        <button mat-button [matMenuTriggerFor]="menu2">Menü 2</button>
-  
-        <mat-menu #menu3="matMenu" class="text-center">
-          <button mat-menu-item>Menü 3 opció 1</button>
-          <button mat-menu-item>Menü 3 opció 2</button>
-        </mat-menu>
-        <button mat-button [matMenuTriggerFor]="menu3">Menü 3</button>
-      </div>
-      <div>
-        <button mat-button routerLink="/register" color="secondary">Regisztráció</button>
-        <button mat-button routerLink="/login" color="secondary">Bejelentkezés</button>
-      </div>
-    </mat-toolbar>
-  
-    <div class="flex flex-col items-center mt-16">
-      <h1 class="text-4xl font-bold mb-4">Üdvözlünk a pénzügyi oldalon!</h1>
-      <img src="assets/welcome.jpg" alt="Pénzügyi vonaldiagram" class="w-1/3 h-64 rounded-lg shadow-lg">
-      <p class="text-lg text-gray-700">Ha szeretnéd jobban átlátni pénzügyeidet...</p>
-    </div>
-  </body>
+<div class="flex flex-col items-center gap-16 mt-16">
+  <h1 class="text-4xl font-bold">Üdvözlünk a pénzügyi oldalon!</h1>
+  <img src="assets/welcome.jpg" alt="Pénzügyi vonaldiagram" class="w-1/3 h-64 rounded-lg shadow-lg">
+  <p class="text-lg text-gray-700">Ha szeretnéd jobban átlátni pénzügyeidet...</p>
+  <button hlmBtn routerLink="login">Vágjunk bele</button>
+</div>

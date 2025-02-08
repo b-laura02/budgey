@@ -1,11 +1,98 @@
+@import '@angular/cdk/overlay-prebuilt.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body { height: 100%; }
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+app-root {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#wrapper > *:not(router-outlet) {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mdc-notched-outline__notch
 {
-  border-right: none;
+border-right: none;
+}
+
+:root {
+--font-sans: ''
+}
+
+:root {
+  --background: 0 0% 98%; /* Lighter background */
+  --foreground: 240 8% 12%; /* Slightly darker text */
+  --card: 0 0% 98%; /* Match the new background for cards */
+  --card-foreground: 240 8% 12%; /* Match the text adjustment */
+  --popover: 0 0% 98%; /* Adjusted to align with the lighter theme */
+  --popover-foreground: 240 8% 12%; 
+  --primary: 0 38% 29%; /* #944c46 */
+  --primary-foreground: 0 0% 100%; /* Ensure readability */
+  --secondary: 197 19% 38%; /* #425f61 */
+  --secondary-foreground: 0 0% 95%; /* Adjust for contrast */
+  --muted: 240 12% 94%; /* Slightly darker muted color */
+  --muted-foreground: 240 5% 40%; /* Adjust for contrast */
+  --accent: 240 15% 95% / 30%; /* Light, almost transparent color */
+  --accent-foreground: 240 10% 12%; /* Slightly darker for contrast */
+  --destructive: 0 70% 60%; /* Slightly less saturated red */
+  --destructive-foreground: 0 0% 100%; /* Ensure readability */
+  --border: 240 10% 80%; /* More visible borders */
+  --input: 240 10% 85%; /* Improved input background */
+  --ring: 0 38% 29%; /* Match the primary color */
+  --radius: 0.75rem; /* Reduced radius for a sharper look */
+  --gray: 0 0% 69%; /* Default gray (#b0a9a8) */
+  color-scheme: light;
+}
+
+.dark {
+  --background: 220 15% 10%; /* Slightly lighter dark mode background */
+  --foreground: 0 0% 90%; /* Softer white text */
+  --card: 220 20% 12%; /* Slightly more contrast for cards */
+  --card-foreground: 0 0% 90%; /* Adjusted to match the text */
+  --popover: 220 20% 12%; /* Match the card styling */
+  --popover-foreground: 0 0% 90%; /* Consistency with text */
+  --primary: 0 38% 29%; /* #944c46 */
+  --primary-foreground: 0 0% 98%; /* Ensure readability */
+  --secondary: 197 19% 38%; /* #425f61 */
+  --secondary-foreground: 0 0% 95%; /* Adjust for contrast */
+  --muted: 220 10% 15%; /* Softer muted background */
+  --muted-foreground: 220 5% 60%; /* Slightly darker text for muted */
+  --accent: 220 25% 30%; /* Cooler accent */
+  --accent-foreground: 0 0% 90%; /* Lighter accent text */
+  --destructive: 0 65% 40%; /* More muted destructive tone */
+  --destructive-foreground: 0 90% 98%; /* Bright text for destructive */
+  --border: 220 15% 25%; /* More visible borders in dark mode */
+  --input: 220 15% 25%; /* Adjust input background */
+  --ring: 0 38% 29%; /* Match primary for focus rings */
+  --gray: 0 0% 69%; /* Default gray (#b0a9a8) */
+  color-scheme: dark;
+}
+
+
+
+
+@layer base {
+* {
+@apply border-border;
+}
 }

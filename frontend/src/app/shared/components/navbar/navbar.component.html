@@ -1,0 +1,19 @@
+<div class="w-full h-12 flex flex-row justify-between items-center px-4 bg-primary-300">
+  <img src="assets/BUDGEY.png" alt="BUDGEY" class="scale-75 cursor-pointer" routerLink="/" />
+  <button hlmBtn variant="ghost" [brnMenuTriggerFor]="profile">
+    <mat-icon class="text-secondary-500 !text-[32px] !h-8 !w-8">account_circle</mat-icon>
+  </button>
+
+  <ng-template #profile>
+    <hlm-sub-menu>
+      <div class="flex justify-center items-center">
+        <mat-icon class="text-secondary-500 !text-[32px] !h-8 !w-8">account_circle</mat-icon>
+        <hlm-menu-label>Profile name</hlm-menu-label>
+      </div>
+      
+      <hlm-menu-separator />
+      <!-- <button hlmMenuItem>Email link</button> -->
+      <button hlmMenuItem>Kijelentkezés</button>
+    </hlm-sub-menu>
+  </ng-template>
+</div>

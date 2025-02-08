@@ -1,0 +1,43 @@
+<div class="flex flex-col gap-4 p-8 h-full w-full">
+  <h4 hlmH4 class="text-gray-800">Record Data</h4>
+  <div hlmCard>
+    <div hlmCardContent class="grid grid-cols-2 gap-4 p-8">
+      <hlm-form-field class=" flex items-center">
+        <label hlmLabel>
+          Name
+          <input class="w-80" hlmInput type="text" placeholder="Name" />
+        </label>
+      </hlm-form-field>
+      <hlm-form-field class=" flex items-center">
+        <label hlmLabel>
+          Amount
+          <input class="w-80" hlmInput type="number" placeholder="Amount" />
+        </label>
+      </hlm-form-field>
+      <div class="col-span-2">
+        <hlm-form-field class="space-y-2 flex items-center">
+          <hlm-select class="inline-block space-y-0" placeholder="Type" formControlName="fruit">
+            <label hlmLabel>
+              Type
+            </label>
+            <hlm-select-trigger class="w-80">
+              <hlm-select-value />
+            </hlm-select-trigger>
+            <hlm-select-content>
+              <hlm-select-label>Eszközök</hlm-select-label>
+              <hlm-option [value]="'bef_penz_eszk'">Befektetett pénzügyi eszköz</hlm-option>
+              <hlm-option [value]="'immat_javak'">Immateriális javak</hlm-option>
+              <hlm-menu-separator />
+              <hlm-select-label>Források</hlm-select-label>
+              <hlm-option [value]="'adozott_eredmeny'">Befektetett pénzügyi eszköz</hlm-option>
+              <hlm-option [value]="'szallitoknak_tartozas'">Szállítóknak való tartozás</hlm-option>
+            </hlm-select-content>
+          </hlm-select>
+        </hlm-form-field>
+      </div>
+    </div>
+    <div hlmCardFooter class="flex-row-reverse">
+      <button hlmBtn variant="secondary">Confirm</button>
+    </div>
+  </div>
+</div>
