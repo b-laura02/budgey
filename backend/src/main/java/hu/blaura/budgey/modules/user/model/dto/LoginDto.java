@@ -1,4 +1,4 @@
-package hu.blaura.budgey.model.dto;
+package hu.blaura.budgey.modules.user.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

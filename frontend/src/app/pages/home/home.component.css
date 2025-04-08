@@ -1,0 +1,6 @@
+:host {
+  flex-grow: 1; /* Fill the remaining space */
+  height: 100%; /* Ensure full height */
+  display: flex;
+  overflow: hidden;
+}

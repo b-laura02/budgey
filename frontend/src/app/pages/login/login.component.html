@@ -13,15 +13,22 @@
             <mat-label>Jelszó</mat-label>
             <input matInput type="password" required formControlName="password" />
           </mat-form-field>
-  
-          <button mat-raised-button color="tertiary" class="w-1/2 items-center" [disabled]="loginForm.invalid" >Belépés</button>
+          
+          <button hlmBtn color="tertiary" class="w-1/2 items-center" [disabled]="loginForm.invalid || isLoading" (click)="login()">
+            @if (isLoading) {
+              <hlm-spinner size="sm"></hlm-spinner>
+            } @else {
+              Belépés
+            }
+          </button>
+          
         </form>
       </div>
     </div>
 
     <div class="w-1/2 flex flex-col items-end justify-end p-16 rounded-lg bg-gray-100">
         <img src="assets/malac.jpg" alt="Kép" class="w-full h-full object-cover" />
-        <button mat-flat-button color="secondary" [routerLink]="'/register'">Regisztráció</button>
+        <button hlmBtn color="secondary" [routerLink]="'/register'">Regisztráció</button>
     </div>
 
 

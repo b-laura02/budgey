@@ -1,10 +1,11 @@
-package hu.blaura.budgey.service;
+package hu.blaura.budgey.modules.user.service;
 
-import hu.blaura.budgey.model.User;
-import hu.blaura.budgey.model.dto.AuthResponseDto;
-import hu.blaura.budgey.model.dto.LoginDto;
-import hu.blaura.budgey.model.dto.RegisterDto;
-import hu.blaura.budgey.repository.UserRepository;
+import hu.blaura.budgey.modules.user.model.User;
+import hu.blaura.budgey.modules.user.model.dto.AuthResponseDto;
+import hu.blaura.budgey.modules.user.model.dto.LoginDto;
+import hu.blaura.budgey.modules.user.model.dto.RegisterDto;
+import hu.blaura.budgey.modules.user.repository.UserRepository;
+import hu.blaura.budgey.utils.TokenUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder; // ezzel titkositjuk a jelszavakat
+    private final TokenUtil tokenUtil;
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -38,7 +40,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        String token = generateToken(user);
+        String token = tokenUtil.generateToken(user);
 
         return new AuthResponseDto(token, user.getEmail(), user.getFullName());
     }
@@ -56,16 +58,8 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
-        String token = generateToken(user);
+        String token = tokenUtil.generateToken(user);
 
         return new AuthResponseDto(token, user.getEmail(), user.getFullName());
-    }
-
-    private String generateToken(User user) {
-        return Jwts.builder()
-                .setSubject(user.getEmail())
-                .claim("name", user.getFullName())
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
     }
 }

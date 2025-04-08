@@ -1,0 +1,20 @@
+export enum BalanceGroup {
+  UNKNOWN = 'UNKNOWN',
+  IMMATERIALIS_JAVAK = 'Immateriális javak',
+  TARGYI_ESZKOZOK = 'Tárgyi eszközök',
+  BEFEKTETETT_PENZUGYI_ESZKOZOK = 'Befektetett pénzügyi eszközök',
+  KESZLETEK = 'Készletek',
+  KOVETELESEK = 'Követelések',
+  ERTEKPAPIROK = 'Értékpapírok',
+  PENZESZKOZOK = 'Pénzeszközök',
+  JEGYZETT_TOKE = 'Jegyzett tőke',
+  JEGYZET_TOKE_BE_NEM_FIZ = 'Jegyzett, de még be nem fizetett tőke (-)',
+  TOKETARTALEK = 'Tőketartalék',
+  EREDMENYTARTALEK = 'Eredménytartalék',
+  LEKOTOTT_TARTALEK = 'Lekötött tartalék',
+  ERTEKELESI_TARTALEK = 'Értékelési tartalék',
+  ADOZOTT_EREDMENY = 'Adózott eredmény',
+  HATRASOROLT = 'Hátrasorolt kötelezettségek',
+  HOSSZU_LEJARATU = 'Hosszú lejáratú kötelezettségek',
+  ROVID_LEJARATU = 'Rövid lejáratú kötelezettségek'
+}

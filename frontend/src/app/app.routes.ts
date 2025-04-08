@@ -9,6 +9,7 @@ import { StatementsComponent } from './pages/home/statements/statements.componen
 import { AdvicesComponent } from './pages/home/advices/advices.component';
 import { RecordComponent } from './pages/home/record/record.component';
 import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
+import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
     { 
         path: 'home', 
         component: HomeComponent, 
+        canActivate: [authGuard],
         children: [
             { path: 'dashboard', component: DashboardComponent },
             { path: 'record', component: RecordComponent },

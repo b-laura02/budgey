@@ -1,4 +1,4 @@
-package hu.blaura.budgey.model;
+package hu.blaura.budgey.modules.tip.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor //parameteres-osszessel
 @Data //adatosztaly -serializacio stb (g/s)
 @Entity //objektum
-@Table(name = "user") //postgre-be letrehoz egy tablat
-public class User {
+@Table(name = "tip") //postgre-be letrehoz egy tablat
+public class Tip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String email;
-    private String fullName;
-    private String password;
+    private String title;
+    private String text;
+    private String date;
+    private boolean isAiGenerated;
+    private String type;
 }

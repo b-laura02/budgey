@@ -1,9 +1,9 @@
-package hu.blaura.budgey.controller;
+package hu.blaura.budgey.modules.user.controller;
 
-import hu.blaura.budgey.model.dto.AuthResponseDto;
-import hu.blaura.budgey.model.dto.LoginDto;
-import hu.blaura.budgey.model.dto.RegisterDto;
-import hu.blaura.budgey.service.AuthService;
+import hu.blaura.budgey.modules.user.model.dto.AuthResponseDto;
+import hu.blaura.budgey.modules.user.model.dto.LoginDto;
+import hu.blaura.budgey.modules.user.model.dto.RegisterDto;
+import hu.blaura.budgey.modules.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

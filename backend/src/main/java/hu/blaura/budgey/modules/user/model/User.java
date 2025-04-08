@@ -1,5 +1,6 @@
-package hu.blaura.budgey.model.dto;
+package hu.blaura.budgey.modules.user.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor //default construktor
 @AllArgsConstructor //parameteres-osszessel
 @Data //adatosztaly -serializacio stb (g/s)
-public class RegisterDto {
+@Entity //objektum
+@Table(name = "budgey_user") //postgre-be letrehoz egy tablat
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String email;
     private String fullName;
     private String password;

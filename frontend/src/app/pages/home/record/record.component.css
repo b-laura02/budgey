@@ -1,5 +1,7 @@
 :host {
-  display: block;
+  flex-grow: 1; /* Fill the remaining space */
+  height: 100%; /* Ensure full height */
+  display: flex;
 }
 
 hlm-select div {

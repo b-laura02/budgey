@@ -7,13 +7,13 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:3333';
+  private baseUrl = 'http://localhost:8080';
   private tokenKey = 'auth_token';
 
   constructor(private http: HttpClient) { }
 
   register(email: string, fullName: string, password: string): Observable<any> {
-    const url = `${this.baseUrl}/auth/login`;
+    const url = `${this.baseUrl}/auth/register`;
     return this.http.post(url, { email, fullName, password }).pipe(
       map((response: any) => {
         if (response && response.token) {

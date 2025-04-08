@@ -1,4 +1,9 @@
-<div class="flex w-full h-full">
+<div id="home-wrapper" class="flex w-full h-full">
+  <!-- Navrail (not scrollable) -->
   <app-navrail></app-navrail>
-  <router-outlet></router-outlet>
+
+  <!-- Router outlet (scrollable) -->
+  <div class="overflow-auto p-8 w-full h-full">
+    <router-outlet></router-outlet>
+  </div>
 </div>

@@ -1,36 +1,44 @@
 <div class="flex h-screen">
-    <!-- Bal oldali box -->
-    <div class="w-1/2 flex items-center justify-center bg-gray-100">
-      <div class="bg-white px-10 py-12 rounded-lg shadow-md w-96">
-        <h2 class="text-2xl font-bold mb-6 text-center">Regisztráció</h2>
-        <form [formGroup]="registerForm">
-          <mat-form-field appearance="outline" class="w-full mb-4">
-            <mat-label>Email cím</mat-label>
-            <input matInput type="email" required formControlName="email" />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-full mb-4">
-            <mat-label>Teljes név</mat-label>
-            <input matInput type="text" required formControlName="fullName" />
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="w-full mb-4">
-            <mat-label>Jelszó</mat-label>
-            <input matInput type="password" required formControlName="password" />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-full mb-4">
-            <mat-label>Jelszó megerősítése</mat-label>
-            <input matInput type="password" required formControlName="confirmPassword" />
-          </mat-form-field>
-  
-          <button mat-raised-button color="tertiary" class="w-1/2 items-center" [disabled]="registerForm.invalid || registerForm.get('password')?.value !== registerForm.get('confirmPassword')?.value" (click)="register()">Regisztráció</button>
-        </form>
-      </div>
-    </div>
+  <!-- Bal oldali box -->
+  <div class="w-1/2 flex items-center justify-center bg-gray-100">
+    <div class="bg-white px-10 py-12 rounded-lg shadow-md w-96">
+      <h2 class="text-2xl font-bold mb-6 text-center">Regisztráció</h2>
+      <form [formGroup]="registerForm">
+        <mat-form-field appearance="outline" class="w-full mb-4">
+          <mat-label>Email cím</mat-label>
+          <input matInput type="email" required formControlName="email" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full mb-4">
+          <mat-label>Teljes név</mat-label>
+          <input matInput type="text" required formControlName="fullName" />
+        </mat-form-field>
 
-    <div class="w-1/2 flex flex-col items-end justify-end p-16 rounded-lg bg-gray-100">
-        <img src="assets/malac.jpg" alt="Kép" class="w-full h-full object-cover" />
-        <button mat-flat-button color="secondary" [routerLink]="'/login'">Belépés</button>
+        <mat-form-field appearance="outline" class="w-full mb-4">
+          <mat-label>Jelszó</mat-label>
+          <input matInput type="password" required formControlName="password" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full mb-4">
+          <mat-label>Jelszó megerősítése</mat-label>
+          <input matInput type="password" required formControlName="confirmPassword" />
+        </mat-form-field>
+
+        <button hlmBtn color="tertiary" class="w-1/2 items-center"
+          [disabled]="registerForm.invalid || registerForm.get('password')?.value !== registerForm.get('confirmPassword')?.value || isLoading"
+          (click)="register()">
+          @if (isLoading) {
+            <hlm-spinner size="sm"></hlm-spinner>
+          } @else {
+            Regisztráció
+          }
+        </button>
+      </form>
     </div>
+  </div>
+
+  <div class="w-1/2 flex flex-col items-end justify-end p-16 rounded-lg bg-gray-100">
+    <img src="assets/malac.jpg" alt="Kép" class="w-full h-full object-cover" />
+    <button hlmBtn color="secondary" [routerLink]="'/login'">Belépés</button>
+  </div>
 
 
-    </div>
+</div>
