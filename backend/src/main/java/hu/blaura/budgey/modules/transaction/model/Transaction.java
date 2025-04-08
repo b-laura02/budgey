@@ -15,10 +15,12 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type;
-    @ManyToOne
-    @JoinColumn(name = "classification_id", nullable = false)
-    private Classification classification;
+    // Simplified categorizing
+    private TransactionCategory category;
+//    @ManyToOne
+//    @JoinColumn(name = "classification_id", nullable = false)
+//    private Classification classification;
     private Double amount;
     private String title;
+    private String date;
 }
