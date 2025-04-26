@@ -12,5 +12,4 @@ import { HlmMenuModule } from '@spartan-ng/ui-menu-helm';
   styleUrl: './navrail.component.css'
 })
 export class NavrailComponent {
-
 }

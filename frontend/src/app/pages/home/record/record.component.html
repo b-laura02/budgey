@@ -1,60 +1,113 @@
 <div class="flex flex-col gap-4 h-full w-full">
-  <h4 hlmH4 class="text-gray-800">Record Data</h4>
-  <form [formGroup]="recordForm">
+  <h4 hlmH4 class="text-gray-800">Adatbevitel</h4>
+  <hlm-tabs tab="income" class="w-full">
+    <hlm-tabs-list class="w-full grid grid-cols-2" aria-label="tabs example">
+      <button hlmTabsTrigger="income" (click)="onTabsChange(false)">Bevétel</button>
+      <button hlmTabsTrigger="expense" (click)="onTabsChange(true)">Kiadás</button>
+    </hlm-tabs-list>
+  </hlm-tabs>
+  <form [formGroup]="recordForm" (submit)="onSubmit()">
     <div hlmCard>
       <div hlmCardContent class="grid grid-cols-2 gap-4 p-8">
         <hlm-form-field class=" flex items-center">
           <label hlmLabel>
-            Name
-            <input class="w-80" hlmInput type="text" placeholder="Name" />
+            Név
+            <input class="w-80" hlmInput type="text" placeholder="Név" formControlName="name" />
           </label>
         </hlm-form-field>
         <hlm-form-field class=" flex items-center">
           <label hlmLabel>
-            Amount
-            <input class="w-80" hlmInput type="number" placeholder="Amount" />
+            Összeg {{isExpense ? '(-)' : ''}}
+            <input class="w-80" hlmInput type="number" placeholder="Összeg {{isExpense ? '(-)' : ''}}" formControlName="amount" />
           </label>
         </hlm-form-field>
+        <hlm-form-field class=" flex items-center">
+          <label hlmLabel>
+            Dátum
+            <input class="w-80" hlmInput type="date" placeholder="Dátum" formControlName="date" />
+          </label>
+        </hlm-form-field>
+        <!-- @if (isExpense) { -->
         <div>
           <hlm-form-field class="space-y-2 flex items-center">
-            <hlm-select class="inline-block space-y-0" placeholder="Főcsoport" formControlName="mainGroup">
+            <!-- <hlm-select #expenseSelect class="inline-block space-y-0" placeholder="Válassz egy opciót" formControlName="category">
               <label hlmLabel>
-                Főcsoport
+                {{isExpense ? 'Kiadás típusa' : 'Bevétel típusa' }}
               </label>
-              <hlm-select-trigger class="w-80">
-                <hlm-select-value />
+              <hlm-select-trigger #expense class="w-80">
+                <span class="truncate">
+                  {{ recordForm.get('category')?.value || 'Válassz egy opciót' }}
+                </span>
               </hlm-select-trigger>
-              <hlm-select-content>
-                @for (mainGroup of balanceMainGroups; track $index) {
-                  <hlm-option [value]="mainGroup[0]">{{mainGroup[1]}}</hlm-option>
+              <hlm-select-content #selectContent class="max-h-60">
+                @for (category of filteredCategories; track $index) {
+                  <hlm-option [value]="category">{{category | transactionCategory}} </hlm-option>
                 }
               </hlm-select-content>
-            </hlm-select>
+            </hlm-select> -->
+            <hlm-form-field class="space-y-2 flex items-start flex-col">
+              <label hlmLabel>
+                {{ isExpense ? 'Kiadás típusa' : 'Bevétel típusa' }}
+              </label>
+              <div class="relative w-80">
+                <select
+                  #select
+                  hlmInput
+                  formControlName="category"
+                  class="appearance-none bg-background border border-input rounded-md py-2 pl-3 pr-8 text-sm w-full"
+                >
+                  <option [ngValue]="null" disabled selected hidden>Válassz egy opciót</option>
+                  @for (category of filteredCategories; track $index) {
+                    <option [value]="category">{{ category | transactionCategory }}</option>
+                  }
+                </select>
+                <mat-icon 
+                  size="sm" 
+                  class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                >keyboard_arrow_down</mat-icon>
+              </div>
+            </hlm-form-field>
           </hlm-form-field>
         </div>
-        @if (balanceGroups$ | async; as balanceGroups) {
-          <div>
-            <hlm-form-field class="space-y-2 flex items-center">
-              <hlm-select class="inline-block space-y-0" placeholder="Csoport" formControlName="group">
-                <label hlmLabel>
-                  Csoport
-                </label>
-                <hlm-select-trigger class="w-80">
-                  <hlm-select-value />
-                </hlm-select-trigger>
-                <hlm-select-content>
-                  @for (group of balanceGroups; track $index) {
-                    <hlm-option [value]="group[0]">{{group[1]}}</hlm-option>
-                  }
-                </hlm-select-content>
-              </hlm-select>
-            </hlm-form-field>
-          </div>
-        }
       </div>
       <div hlmCardFooter class="flex-row-reverse">
-        <button hlmBtn variant="secondary">Confirm</button>
+        <button hlmBtn variant="secondary" [disabled]="recordForm.invalid">Mentés</button>
       </div>
     </div>
   </form>
+    
+  <h4 hlmH4 class="text-gray-800">Gyorsgombok</h4>
+  <div class="flex gap-8">
+    <div hlmCard class="w-[300px] h-min">
+      <button hlmBtn size="icon" class="w-full h-24 flex flex-col p-2" disabled>
+        <mat-icon class="!text-[48px] !h-12 !w-12">qr_code_scanner</mat-icon>
+        OCR olvasó
+      </button>
+      <input 
+        type="file" 
+        class="hidden"
+        accept="image/*" 
+        
+        #ocrFileInput
+      />
+      <div class="px-4 py-1 text-center">Automatikus nyugtafelismerés</div>
+    </div>
+    <div hlmCard class="w-[300px] h-min">
+      <button hlmBtn size="icon" (click)="csvFileInput.click()" class="w-full h-24 flex flex-col p-2">
+        <mat-icon class="!text-[48px] !h-12 !w-12">upload_file</mat-icon>
+        Import CSV
+      </button>
+      <input 
+        type="file" 
+        class="hidden"
+        accept=".csv,.xls,.xlsx" 
+        (change)="handleCSV($event)"
+        #csvFileInput
+      />
+      <div class="px-4 py-1 text-base text-center">
+        <p>Táblázatból való importálás</p>
+        <button hlmBtn variant="link" class="!p-0 h-min">Formátum segédlet</button>
+      </div>
+    </div>
+  </div>
 </div>

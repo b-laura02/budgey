@@ -1,1 +1,71 @@
-<p>settings works!</p>
+<div class="flex flex-col gap-4 h-full w-full">
+  <h4 hlmH4 class="text-gray-800">Beállítások</h4>
+  @if (preferences$ | async; as prefs) {
+    <form [formGroup]="settingsForm" (submit)="onSubmit()">
+      <div hlmCard>
+        <div hlmCardContent class="grid grid-cols-2 gap-4 p-8">
+          <hlm-form-field class=" flex items-center">
+            <label hlmLabel>
+              Bevételi cél
+              <input class="w-80" hlmInput type="number" formControlName="targetIncome" />
+            </label>
+          </hlm-form-field>
+          <hlm-form-field class=" flex items-center">
+            <label hlmLabel>
+              Kiadási cél
+              <input class="w-80" hlmInput type="number" placeholder="0" formControlName="targetExpense" />
+            </label>
+          </hlm-form-field>
+          <hlm-form-field class=" flex items-center">
+            <label hlmLabel>
+              Profit cél
+              <input class="w-80" hlmInput type="number" placeholder="0" formControlName="targetProfit" />
+            </label>
+          </hlm-form-field>
+        </div>
+        <div hlmCardFooter class="flex-row-reverse justify-between">
+          <button hlmBtn variant="secondary" [disabled]="settingsForm.invalid">Mentés</button>
+          <div class=" flex items-center">
+            <label hlmLabel>
+              Engedélyezem az AI-nak az adataim feldolgozását
+              <!-- <input class="w-80" hlmInput type="checkbox" placeholder="0" formControlName="allowAIProcessing" /> -->
+              <hlm-checkbox class="mr-2" formControlName="allowAIProcessing" />
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  } @else {
+    <div hlmCard>
+      <div hlmCardContent class="grid grid-cols-2 gap-4 p-8">
+        <div class=" flex items-center">
+          <label hlmLabel>
+            <hlm-skeleton class="h-6 w-14"></hlm-skeleton>
+            <hlm-skeleton class="h-10 w-80 my-1"></hlm-skeleton>
+          </label>
+        </div>
+        <div class=" flex items-center">
+          <label hlmLabel>
+            <hlm-skeleton class="h-6 w-14"></hlm-skeleton>
+            <hlm-skeleton class="h-10 w-80 my-1"></hlm-skeleton>
+          </label>
+        </div>
+        <div class=" flex items-center">
+          <label hlmLabel>
+            <hlm-skeleton class="h-6 w-14"></hlm-skeleton>
+            <hlm-skeleton class="h-10 w-80 my-1"></hlm-skeleton>
+          </label>
+        </div>
+      </div>
+      <div hlmCardFooter class="flex-row-reverse justify-between">
+        <button hlmBtn variant="secondary" disabled>Beállítások módosítása</button>
+        <div class=" flex items-center">
+          <label hlmLabel>
+            <hlm-skeleton class="h-6 w-48 inline-block"></hlm-skeleton>
+            <hlm-skeleton class="ml-2 h-6 w-6 inline-block"></hlm-skeleton>
+          </label>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { HlmButtonModule } from '@spartan-ng/ui-button-helm';
 import { HlmSkeletonModule } from '@spartan-ng/ui-skeleton-helm';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 
 @Component({
@@ -36,7 +37,11 @@ export class LoginComponent {
   loginForm: FormGroup = getLogInForm();
   isLoading = false;
 
-  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router, 
+    private snackBar: SnackbarService,
+  ) {}
 
   login() {
     console.log("login");

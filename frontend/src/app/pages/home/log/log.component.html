@@ -1,1 +1,152 @@
-<p>log works!</p>
+<div class="flex flex-col gap-4 h-full w-full">
+  <h4 hlmH4 class="text-gray-800">Tranzakciók</h4>
+  <hlm-tabs tab="all" class="w-full">
+    <hlm-tabs-list class="w-80 grid grid-cols-3" aria-label="tabs example">
+      <button hlmTabsTrigger="all" (click)="onTabsChange(0)">Tételes</button>
+      <button hlmTabsTrigger="weekly" (click)="onTabsChange(1)">Heti</button>
+      <button hlmTabsTrigger="monthly" (click)="onTabsChange(2)">Havi</button>
+    </hlm-tabs-list>
+  </hlm-tabs>
+  <hlm-table class="w-full h-min">
+    <hlm-caption>
+      @if (currentTab === 0) {
+        @if (transactionData$ | async; as data) {
+          <div class="flex justify-between items-center w-full px-4">
+            <span class="text-sm text-gray-600">
+              Összesen {{ data.length }} elem
+            </span>
+            <div class="flex gap-2">
+              <button hlmBtn variant="ghost" size="icon" 
+                      [disabled]="currentPage === 1"
+                      (click)="onPageChange(currentPage - 1)">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <div class="flex items-center gap-1">
+                {{currentPage}}
+              </div>
+              <button hlmBtn variant="ghost" size="icon" 
+                      [disabled]="data.length < itemsPerPage"
+                      (click)="onPageChange(currentPage + 1)">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+          </div>
+        }
+      } @else {
+        @if (summaryData$ | async; as data) {
+          <div class="flex justify-between items-center w-full px-4">
+            <span class="text-sm text-gray-600">
+              Összesen {{ data.length }} elem
+            </span>
+            <div class="flex gap-2">
+              <button hlmBtn variant="ghost" size="icon" 
+              [disabled]="currentPage === 1"
+              (click)="onPageChange(currentPage - 1)">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <div class="flex items-center gap-1">
+                {{currentPage}}
+              </div>
+              <button hlmBtn variant="ghost" size="icon" 
+                      [disabled]="data.length < itemsPerPage"
+                      (click)="onPageChange(currentPage + 1)">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+          </div>
+        }
+      }
+    </hlm-caption>
+    @if (currentTab === 0) {
+      <hlm-trow class="w-full">
+        <hlm-th class="w-1/5">Dátum</hlm-th>
+        <hlm-th class="w-1/5">Név</hlm-th>
+        <hlm-th class="w-1/5">Összeg</hlm-th>
+        <hlm-th class="w-1/5">Kategória</hlm-th>
+        <hlm-th class="w-1/5"></hlm-th>
+      </hlm-trow>
+      @for (item of (transactionData$ | async); track $index) {
+        <hlm-trow>
+          <hlm-td class="w-1/5">{{item.date}}</hlm-td>
+          <hlm-td class="w-1/5">{{item.title}}</hlm-td>
+          <hlm-td class="w-1/5">{{item.amount}}</hlm-td>
+          <hlm-td class="w-1/5">{{item.category}}</hlm-td>
+          <hlm-td class="w-1/5"></hlm-td>
+        </hlm-trow>
+      } @empty {
+        <hlm-trow>
+          <hlm-td class="w-full">
+            <hlm-skeleton class='h-5 w-full' />
+          </hlm-td>
+        </hlm-trow>
+        <hlm-trow>
+          <hlm-td class="w-full">
+            <hlm-skeleton class='h-5 w-full' />
+          </hlm-td>
+        </hlm-trow>
+        <hlm-trow>
+          <hlm-td class="w-full">
+            <hlm-skeleton class='h-5 w-full' />
+          </hlm-td>
+        </hlm-trow>
+        <hlm-trow>
+          <hlm-td class="w-full">
+            <hlm-skeleton class='h-5 w-full' />
+          </hlm-td>
+        </hlm-trow>
+        <hlm-trow>
+          <hlm-td class="w-full">
+            <hlm-skeleton class='h-5 w-full' />
+          </hlm-td>
+        </hlm-trow>
+      }
+    } @else {
+      <hlm-trow class="w-full">
+        <hlm-th class="w-1/5">Dátum</hlm-th>
+        <hlm-th class="w-1/5">Bevétel</hlm-th>
+        <hlm-th class="w-1/5">Kiadás</hlm-th>
+        <hlm-th class="w-1/5">Profit</hlm-th>
+        <hlm-th class="w-1/5"></hlm-th>
+      </hlm-trow>
+      @for (item of (summaryData$ | async); track $index) {
+        <hlm-trow>
+          <hlm-td class="w-1/5">{{item.fromDate + ' - ' + item.toDate}}</hlm-td>
+          <hlm-td class="w-1/5">{{item.income}}</hlm-td>
+          <hlm-td class="w-1/5">{{item.expense}}</hlm-td>
+          <hlm-td class="w-1/5">{{item.profit}}</hlm-td>
+          <hlm-td class="w-1/5">
+            <button hlmBtn variant="ghost" size="icon" (click)="download(item)">
+              <mat-icon>download</mat-icon>
+            </button>
+          </hlm-td>
+        </hlm-trow>
+      } @empty {
+        <hlm-trow>
+          <hlm-td>
+            <hlm-skeleton class='h-10 w-full' />
+          </hlm-td>
+        </hlm-trow>
+        <hlm-trow>
+          <hlm-td>
+            <hlm-skeleton class='h-10 w-full' />
+          </hlm-td>
+        </hlm-trow>
+        <hlm-trow>
+          <hlm-td>
+            <hlm-skeleton class='h-10 w-full' />
+          </hlm-td>
+        </hlm-trow>
+        <hlm-trow>
+          <hlm-td>
+            <hlm-skeleton class='h-10 w-full' />
+          </hlm-td>
+        </hlm-trow>
+        <hlm-trow>
+          <hlm-td>
+            <hlm-skeleton class='h-10 w-full' />
+          </hlm-td>
+        </hlm-trow>
+      }
+    }
+  </hlm-table>
+</div>

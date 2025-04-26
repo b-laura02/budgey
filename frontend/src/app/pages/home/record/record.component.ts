@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { BrnSelectImports } from '@spartan-ng/brain/select';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { BrnSelectComponent, BrnSelectContentComponent, BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonModule } from '@spartan-ng/ui-button-helm';
 import { HlmCardModule } from '@spartan-ng/ui-card-helm';
 import { HlmFormFieldModule } from '@spartan-ng/ui-formfield-helm';
 import { HlmInputDirective, HlmInputModule } from '@spartan-ng/ui-input-helm';
 import { HlmLabelModule } from '@spartan-ng/ui-label-helm';
-import { HlmMenuSeparatorComponent } from '@spartan-ng/ui-menu-helm';
-import { HlmSelectContentDirective, HlmSelectImports, HlmSelectLabelDirective, HlmSelectModule } from '@spartan-ng/ui-select-helm';
+import { HlmSelectContentDirective, HlmSelectImports, HlmSelectModule } from '@spartan-ng/ui-select-helm';
 import { HlmH4Directive } from '@spartan-ng/ui-typography-helm';
 import { TransactionService } from '../../../shared/services/transaction.service';
-import { ClassificationService } from '../../../shared/services/classification.service';
-import { BalanceMainGroup } from '../../../shared/models/enums/balance-main-group.enum';
 import { getRecordForm } from '../../../shared/forms/record.form';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { map, Observable, of, tap } from 'rxjs';
-import { BalanceGroup } from '../../../shared/models/enums/balance-group.enum';
-import { AsyncPipe } from '@angular/common';
+import { HlmTabsModule } from '@spartan-ng/ui-tabs-helm';
+import { TransactionCategoryPipe } from '../../../shared/pipes/transaction-category.pipe';
+import { ExpenseCategory, IncomeCategory } from '../../../shared/models/enums/transaction-category.enum';
+import { MatIcon } from '@angular/material/icon';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
+import { TransactionDto } from '../../../shared/models/dtos/transaction.dto';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-record',
@@ -30,47 +31,102 @@ import { AsyncPipe } from '@angular/common';
     HlmInputDirective,
     HlmSelectImports,
     BrnSelectImports,
-    HlmMenuSeparatorComponent,
     HlmLabelModule,
     HlmSelectContentDirective,
     ReactiveFormsModule,
-    AsyncPipe
+    HlmTabsModule,
+    TransactionCategoryPipe,
+    MatIcon,
   ],
   templateUrl: './record.component.html',
   styleUrl: './record.component.css'
 })
 export class RecordComponent implements OnInit {
+  @ViewChild('select') select?: HTMLElement;
   recordForm: FormGroup = getRecordForm();
-  balanceMainGroups = Object.entries(BalanceMainGroup);
-  balanceGroups$: Observable<any[]> | null = null;
+  isExpense: boolean = false;
+  incomeCategories = IncomeCategory;
+  expenseCategories = ExpenseCategory;
+  filteredCategories: any[] = this.incomeCategories;
 
   constructor(
     private transactionService: TransactionService,
-    private classificationService: ClassificationService,
+    private snackBar: SnackbarService
   ) { }
 
   ngOnInit(): void {
-    this.recordForm.get('mainGroup')?.valueChanges.subscribe((value: BalanceMainGroup) => {
-      this.onMainGroupChange(value);
+    
+  }
+
+  onTabsChange(value: boolean) {
+    console.log(value);
+    this.isExpense = value;
+    if (this.isExpense) {
+      this.filteredCategories = this.expenseCategories;
+    } else {
+      this.filteredCategories = this.incomeCategories;
+    }
+    this.recordForm.reset({
+      category: null,
     });
   }
 
-  onMainGroupChange(selectedKey: BalanceMainGroup): void {
-    console.log('Selected Key:', selectedKey);
-    const selectedGroup = this.balanceMainGroups.find(group => group[0] === selectedKey);
-    if (selectedGroup) {
-      console.log('Selected Value:', selectedGroup[1]);
-      this.fetchBalanceGroups(selectedKey);
+  onSubmit() {
+    if (this.recordForm.valid) {
+      const data = this.recordForm.value;
+      
+      const payload = {
+        title: data.name?.trim(),
+        amount: data.amount,
+        date: new Date(data.date).toISOString(),
+        category: data.category,
+      } as TransactionDto;
+
+      console.log(payload);
+
+      this.transactionService.create(payload)
+        .pipe(take(1))
+        .subscribe(result => {
+          console.log('result: ', result);
+        }
+      );
     }
   }
 
-  fetchBalanceGroups(balanceMainGroup: BalanceMainGroup) {
-    this.balanceGroups$ = this.classificationService.getBalanceGroupsByBalanceMainGroup(balanceMainGroup).pipe(
-      map((response: BalanceGroup[]) => {
-        const balanceGroups = Object.entries(BalanceGroup);
-        return balanceGroups.filter((group) => response.includes(group[0] as BalanceGroup));
-      })
-    );
+  // handleOCR(event: Event) {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files && input.files.length > 0) {
+  //     const file = input.files[0];
+  //     if (!file.type.match('image.*')) {
+  //       this.snackBar.open('Csak képek tölthetők fel!');
+  //       return;
+  //     }
+  //     // Process the image file here
+  //     console.log('Image selected:', file);
+  //   }
+  // }
+  
+  handleCSV(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const validExtensions = ['.csv', '.docx'];
+      const fileName = file.name.toLowerCase();
+      const isValid = validExtensions.some(ext => fileName.endsWith(ext));
+      
+      if (!isValid) {
+        this.snackBar.open('Csak CSV vagy DOCX fájlok tölthetők fel!');
+        return;
+      }
+      // Process the CSV/DOCX file here
+      console.log('File selected:', file);
+      this.transactionService.importTransactions(file)
+        .pipe(take(1))
+        .subscribe(result => {
+          console.log(result);
+        }
+      );
+    }
   }
 
 }

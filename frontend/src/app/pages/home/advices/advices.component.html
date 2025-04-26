@@ -1,51 +1,39 @@
 <div class="flex flex-col gap-4 h-full w-full">
   <div class="flex flex-row items-center justify-between w-full">
-    <h4 hlmH4 class="text-gray-800">Record Data</h4>
-    <button hlmBtn variant="secondary">Generate advices</button>
+    <h4 hlmH4 class="text-gray-800">Tippek, tanácsok</h4>
+    <button hlmBtn variant="secondary" (click)="generate()">Generate advices</button>
   </div>
-  <!-- ... kartya stb -->
-  <!-- <div class="w-64 h-32 rounded-3xl bg-primary-300 p-2">asd</div> -->
+  <div class="flex flex-row items-center gap-2 w-full">
+    <button hlmToggle variant="outline" 
+      (click)="showAi = !showAi" 
+      [state]="showAi ? 'on' : 'off'">
+      AI tippek
+      <mat-icon>psychology</mat-icon>
+    </button>
+    <button hlmToggle variant="outline" 
+      (click)="showNormal = !showNormal" 
+      [state]="showNormal ? 'on' : 'off'">
+      Normál tippek
+    </button>
+  </div>
   <div class="grid gap-8 grid-cols-2">
-    <div hlmCard class="w-[500px] h-[200px]">
-      <div hlmCardHeader class="pb-3">
-        <h3 hlmCardTitle>Advice 1</h3>
-      </div>
-      <div hlmCardContent>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-      </div>
-    </div>
-    <div hlmCard class="w-[500px] h-[200px]">
-      <div hlmCardHeader class="pb-3">
-        <h3 hlmCardTitle>Advice 1</h3>
-      </div>
-      <div hlmCardContent>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-      </div>
-    </div>
-    <div hlmCard class="w-[500px] h-[200px]">
-      <div hlmCardHeader class="pb-3">
-        <h3 hlmCardTitle>Advice 1</h3>
-      </div>
-      <div hlmCardContent>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-      </div>
-    </div>
-    <div hlmCard class="w-[500px] h-[200px]">
-      <div hlmCardHeader class="pb-3">
-        <h3 hlmCardTitle>Advice 1</h3>
-      </div>
-      <div hlmCardContent>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-      </div>
-    </div>
-    <div hlmCard class="w-[500px] h-[200px]">
-      <div hlmCardHeader class="pb-3">
-        <h3 hlmCardTitle>Advice 1</h3>
-      </div>
-      <div hlmCardContent>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-      </div>
-    </div>
-
+    @for (tip of (tips$ | async); track $index) {
+      @if ((showNormal && !tip.aiGenerated) || (showAi && tip.aiGenerated)) {
+        <div hlmCard class="w-[500px]">
+          <div hlmCardHeader class="pb-3">
+            <h3 hlmCardTitle class="flex justify-between">
+              {{tip.title}}
+              @if (tip.aiGenerated) {
+                <mat-icon>psychology</mat-icon>
+              }
+            </h3>
+          </div>
+          <div hlmCardContent class="whitespace-pre-line">
+            {{tip.text}}
+          </div>
+        </div>
+      }
+    }
+    
   </div>
 </div>

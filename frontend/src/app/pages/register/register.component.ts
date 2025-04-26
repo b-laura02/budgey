@@ -9,9 +9,9 @@ import { Router, RouterLink } from '@angular/router';
 import { getRegisterForm } from '../../shared/forms/register.form';
 import { AuthService } from '../../shared/services/auth.service';
 import { take } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { HlmButtonModule } from '@spartan-ng/ui-button-helm';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-register',
@@ -34,7 +34,11 @@ export class RegisterComponent {
   registerForm: FormGroup = getRegisterForm();
   isLoading = false;
 
-  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) { }
+  constructor(
+    private authService: AuthService, 
+    private router: Router, 
+    private snackBar: SnackbarService,
+  ) { }
 
   register() {
     console.log("register");

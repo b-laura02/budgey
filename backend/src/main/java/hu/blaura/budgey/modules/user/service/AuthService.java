@@ -1,5 +1,7 @@
 package hu.blaura.budgey.modules.user.service;
 
+import hu.blaura.budgey.modules.preferences.model.Preferences;
+import hu.blaura.budgey.modules.preferences.repository.PreferencesRepository;
 import hu.blaura.budgey.modules.user.model.User;
 import hu.blaura.budgey.modules.user.model.dto.AuthResponseDto;
 import hu.blaura.budgey.modules.user.model.dto.LoginDto;
@@ -13,10 +15,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
+    private final PreferencesRepository preferencesRepository;
     private final BCryptPasswordEncoder passwordEncoder; // ezzel titkositjuk a jelszavakat
     private final TokenUtil tokenUtil;
 
@@ -39,6 +44,14 @@ public class AuthService {
         user.setFullName(registerDto.getFullName());
 
         userRepository.save(user);
+
+        Preferences preferences = new Preferences();
+        preferences.setUser(user);
+        preferences.setTargetIncome(0);
+        preferences.setTargetExpense(0);
+        preferences.setTargetProfit(0);
+        preferences.setAllowAIProcessing(false);
+        preferencesRepository.save(preferences);
 
         String token = tokenUtil.generateToken(user);
 

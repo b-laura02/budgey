@@ -1,9 +1,12 @@
 package hu.blaura.budgey.modules.user.controller;
 
+import hu.blaura.budgey.modules.preferences.model.dto.PreferencesDto;
+import hu.blaura.budgey.modules.preferences.service.PreferencesService;
 import hu.blaura.budgey.modules.user.model.dto.AuthResponseDto;
 import hu.blaura.budgey.modules.user.model.dto.LoginDto;
 import hu.blaura.budgey.modules.user.model.dto.RegisterDto;
 import hu.blaura.budgey.modules.user.service.AuthService;
+import hu.blaura.budgey.modules.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class AuthController {
     private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDto> register(@RequestBody RegisterDto registerDto){

@@ -2,10 +2,16 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 export function getRecordForm() {
   return new FormGroup({
-    mainGroup: new FormControl('', [
+    name: new FormControl('', [
       Validators.required,
     ]),
-    group: new FormControl('', [
+    amount: new FormControl('', [
+      Validators.required,
+    ]),
+    date: new FormControl('', [
+      Validators.required,
+    ]),
+    category: new FormControl(null, [
       Validators.required,
     ]),
   });

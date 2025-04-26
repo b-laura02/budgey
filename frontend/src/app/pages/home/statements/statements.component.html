@@ -1,1 +1,122 @@
-<p>statements works!</p>
+<div class="flex flex-col gap-4 h-full w-full">
+  <h4 hlmH4 class="text-gray-800">Kimutatások</h4>
+  
+  <div class="flex justify-between items-center">
+    <hlm-tabs [tab]="activeTab" class="w-full">
+      <hlm-tabs-list class="w-full grid grid-cols-3" aria-label="tabs example">
+        <button hlmTabsTrigger="income" (click)="activeTab = 'income'">Bevétel</button>
+        <button hlmTabsTrigger="expense" (click)="activeTab = 'expense'">Kiadás</button>
+        <button hlmTabsTrigger="profit" (click)="activeTab = 'profit'">Profit</button>
+      </hlm-tabs-list>
+
+      <div class="bg-white p-4 mt-4 rounded-lg shadow w-full h-full">
+        @if (loading) {
+          <div class="w-full h-full flex justify-center items-center">
+            <hlm-spinner></hlm-spinner>
+          </div>
+        } @else {
+          <div class="flex gap-2">
+            <button hlmBtn [variant]="selectedPeriod === 'weekly' ? 'default' : 'outline'" size="sm" 
+                    [class.bg-primary]="selectedPeriod === 'weekly'"
+                    [class.font-primary]="selectedPeriod === 'weekly'"
+                    (click)="changePeriod('weekly')">
+              Heti
+            </button>
+            <button hlmBtn [variant]="selectedPeriod === 'monthly' ? 'default' : 'outline'" size="sm"
+                    [class.bg-primary]=""
+                    [class.bg-primary]="selectedPeriod === 'monthly'"
+                    (click)="changePeriod('monthly')">
+              Havi
+            </button>
+          </div>
+          <div hlmTabsContent="income" class="mt-4">
+            <h5 class="font-medium mb-4">Bevétel trend (utolsó {{ periodCount }} {{ selectedPeriod === 'monthly' ? 'hónap' : 'hét' }})</h5>
+            <canvas baseChart
+            height="300"
+            width="1000"
+                    [data]="{
+                      labels: chartData.labels,
+                      datasets: [
+                        {
+                          data: chartData.income,
+                          label: 'Bevétel',
+                          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                          borderColor: 'rgba(75, 192, 192, 1)',
+                          borderWidth: 1
+                        },
+                        {
+                          data: chartData.income,
+                          label: 'Trend',
+                          borderColor: 'rgba(255, 206, 86, 1)',
+                          borderWidth: 2,
+                          type: 'line',
+                          tension: 0.4
+                        }
+                      ]
+                    }"
+                    type="bar">
+            </canvas>
+          </div>
+          
+          <div hlmTabsContent="expense" class="mt-4">
+            <h5 class="font-medium mb-4">Kiadás trend (utolsó {{ periodCount }} {{ selectedPeriod === 'monthly' ? 'hónap' : 'hét' }})</h5>
+            <canvas baseChart
+            height="300"
+            width="1000"
+                    [data]="{
+                      labels: chartData.labels,
+                      datasets: [
+                        {
+                          data: chartData.expense,
+                          label: 'Kiadás',
+                          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                          borderColor: 'rgba(255, 99, 132, 1)',
+                          borderWidth: 1
+                        },
+                        {
+                          data: chartData.expense,
+                          label: 'Trend',
+                          borderColor: 'rgba(255, 206, 86, 1)',
+                          borderWidth: 2,
+                          type: 'line',
+                          tension: 0.4
+                        }
+                      ]
+                    }"
+                    type="bar">
+            </canvas>
+          </div>
+          
+          <div hlmTabsContent="profit" class="mt-4">
+            <h5 class="font-medium mb-4">Profit trend (utolsó {{ periodCount }} {{ selectedPeriod === 'monthly' ? 'hónap' : 'hét' }})</h5>
+            <canvas baseChart
+                    height="300"
+                    width="1000"
+                    [data]="{
+                      labels: chartData.labels,
+                      datasets: [
+                        {
+                          data: chartData.profit,
+                          label: 'Profit',
+                          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                          borderColor: 'rgba(54, 162, 235, 1)',
+                          borderWidth: 1,
+                          type: 'bar'
+                        },
+                        {
+                          data: chartData.profit,
+                          label: 'Trend',
+                          borderColor: 'rgba(255, 206, 86, 1)',
+                          borderWidth: 2,
+                          type: 'line',
+                          tension: 0.4
+                        }
+                      ]
+                    }">
+            </canvas>
+          </div>
+        }
+      </div>
+    </hlm-tabs>
+  </div>
+</div>

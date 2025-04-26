@@ -12,26 +12,27 @@ export class TipService {
 
   constructor(private http: HttpClient) { }
 
+  generate(): Observable<any> {
+    const token = localStorage.getItem(this.tokenKey);
+    const url = `${this.baseUrl}/tip`;
+    return this.http.post(url, null, { headers: {'Authorization': `Bearer ${token}`}}).pipe(
+      map((response: any) => {
+        if (response) {
+          return response;
+        }
+      })
+    );
+  }
+
   getAll(): Observable<any> {
     const token = localStorage.getItem(this.tokenKey);
     const url = `${this.baseUrl}/tip`;
     return this.http.get(url, { headers: {'Authorization': `Bearer ${token}`}}).pipe(
       map((response: any) => {
-        if(response.status==200)
-        return response;
+        if (response) {
+          return response;
+        }
       })
     );
   }
-
-  delete(id: number): Observable<any> {
-    const token = localStorage.getItem(this.tokenKey);
-    const url = `${this.baseUrl}/tip/${id}`;
-    return this.http.delete(url, { headers: { 'Authorization': `Bearer ${token}` } }).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
-  }
-  
-  
 }

@@ -6,13 +6,16 @@ import hu.blaura.budgey.modules.transaction.model.dto.TransactionDto;
 import hu.blaura.budgey.modules.transaction.service.CsvService;
 import hu.blaura.budgey.modules.transaction.service.TransactionService;
 
+import hu.blaura.budgey.modules.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,58 +37,89 @@ public class TransactionController {
     private final CsvService csvService;
 
     @PostMapping("")
-    public ResponseEntity<Transaction> create(@RequestBody TransactionDto transactionDto) {
-        return ResponseEntity.ok(transactionService.create(transactionDto));
+    public ResponseEntity<Transaction> create(
+            @RequestBody TransactionDto transactionDto,
+            @AuthenticationPrincipal User user
+    ) {
+        return ResponseEntity.ok(transactionService.create(transactionDto, user));
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Transaction>> readAll() {
-        return ResponseEntity.ok(transactionService.getAll());
+    public ResponseEntity<List<Transaction>> readAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int take,
+            @AuthenticationPrincipal User user
+    ) {
+        return ResponseEntity.ok(transactionService.getAll(page, take, user));
     }
 
     @GetMapping("/weekly")
     public ResponseEntity<List<SummaryDto>> getWeeklySummaries(
-            @RequestParam(defaultValue = "5") int weeks) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int take,
+            @AuthenticationPrincipal User user
+    ) {
 
-        if (weeks <= 0) {
+        if (take <= 0) {
             throw new IllegalArgumentException("Weeks parameter must be positive");
         }
+        if (page < 0) {
+            throw new IllegalArgumentException("page parameter must be non-negative");
+        }
 
-        List<SummaryDto> summaries = transactionService.getWeeklySummaries(weeks);
+        List<SummaryDto> summaries = transactionService.getWeeklySummaries(page, take, user);
         return ResponseEntity.ok(summaries);
     }
 
     @GetMapping("/monthly")
     public ResponseEntity<List<SummaryDto>> getMonthlySummaries(
-            @RequestParam(defaultValue = "5") int months) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int take,
+            @AuthenticationPrincipal User user
+    ) {
 
-        if (months <= 0) {
+        if (take <= 0) {
             throw new IllegalArgumentException("Months parameter must be positive");
         }
+        if (page < 0) {
+            throw new IllegalArgumentException("page parameter must be non-negative");
+        }
 
-        List<SummaryDto> summaries = transactionService.getMonthlySummaries(months);
+        List<SummaryDto> summaries = transactionService.getMonthlySummaries(page, take, user);
         return ResponseEntity.ok(summaries);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Transaction> read(@PathVariable Long id) {
+    public ResponseEntity<Transaction> read(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user
+    ) {
         return ResponseEntity.ok(transactionService.getById(id));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Transaction> update(@PathVariable Long id, @RequestBody TransactionDto transactionDto) {
-        return ResponseEntity.ok(transactionService.update(id, transactionDto));
+    public ResponseEntity<Transaction> update(
+            @PathVariable Long id,
+            @RequestBody TransactionDto transactionDto,
+            @AuthenticationPrincipal User user
+    ) {
+        return ResponseEntity.ok(transactionService.update(id, transactionDto, user));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user
+    ) {
         transactionService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(path = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<Transaction>> importTransactions(
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("file") MultipartFile file,
+            @AuthenticationPrincipal User user
+    ) {
 
         if (file.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please upload a CSV file");
@@ -95,7 +129,7 @@ public class TransactionController {
             List<TransactionDto> transactionDtos = csvService.importTransactions(file);
 
             List<Transaction> createdTransactions = transactionDtos.stream()
-                    .map(transactionService::create)
+                    .map(dto -> transactionService.create(dto, user))
                     .toList();
             return ResponseEntity.ok(createdTransactions);
         } catch (IOException e) {
@@ -107,13 +141,15 @@ public class TransactionController {
     @GetMapping("/export")
     public ResponseEntity<Resource> exportTransactions(
             @RequestParam String from,
-            @RequestParam String to) {
+            @RequestParam String to,
+            @AuthenticationPrincipal User user
+    ) {
         try {
             Date fromDate = ISO_DATE_FORMAT.parse(from);
             Date toDate = ISO_DATE_FORMAT.parse(to);
 
             List<Transaction> transactions =
-                    transactionService.getTransactionsBetweenDates(fromDate, toDate);
+                    transactionService.getTransactionsBetweenDates(fromDate, toDate, user);
 
             String csv = csvService.generateTransactionsCsv(transactions);
 

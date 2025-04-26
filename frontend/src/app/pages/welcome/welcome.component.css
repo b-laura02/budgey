@@ -1,0 +1,19 @@
+#kezdooldal_szoveg{
+  color: black;
+  background: linear-gradient(135deg, #f4a9b8b2, #7d7d7d8c);
+  padding: 40px;
+  border-radius: 10px;
+  position: fixed;
+    left: 50%;
+    top: 35%;
+}
+#kep{
+  position: fixed;
+    left: 10%;
+    top: 35%;
+}
+#gomb{
+  position: fixed;
+    left: 80%;
+    top: 90%;
+}

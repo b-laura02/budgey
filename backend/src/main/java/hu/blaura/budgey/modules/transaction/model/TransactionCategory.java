@@ -7,38 +7,39 @@ import lombok.Getter;
 @Getter
 public enum TransactionCategory {
     // BEVÉTELEK
-    SALE("Termékértékesítés"),
-    SERVICE("Szolgáltatás"),
-    RENTAL("Bérbeadás"),
-    LEASE("Tartós bérlet"),
-    SUBSIDY("Támogatás"),
-    INVESTMENT_INCOME("Befektetési bevétel"),
+    SALE("Termékértékesítés", false),
+    SERVICE("Szolgáltatás", false),
+    RENTAL("Bérbeadás", false),
+    LEASE("Tartós bérlet", false),
+    SUBSIDY("Támogatás", false),
+    INVESTMENT_INCOME("Befektetési bevétel", false),
 
     // KIADÁSOK – Működési
-    UTILITIES("Rezsi (víz, áram, internet)"),
-    RENT("Irodabérlés"),
-    SALARY("Bérek és járulékok"),
-    OFFICE_SUPPLIES("Irodaszerek"),
-    TRANSPORT("Közlekedés, üzemanyag"),
-    TELECOMMUNICATION("Telekommunikáció"),
-    INSURANCE("Biztosítás"),
+    UTILITIES("Rezsi (víz, áram, internet)", true),
+    RENT("Irodabérlés", true),
+    SALARY("Bérek és járulékok", true),
+    OFFICE_SUPPLIES("Irodaszerek", true),
+    TRANSPORT("Közlekedés, üzemanyag", true),
+    TELECOMMUNICATION("Telekommunikáció", true),
+    INSURANCE("Biztosítás", true),
 
     // KIADÁSOK – Üzleti költségek
-    PURCHASE("Beszerzés"),
-    MARKETING("Marketing"),
-    SUBSCRIPTION("Szoftver előfizetés"),
-    MAINTENANCE("Karbantartás"),
-    PROFESSIONAL_FEES("Tanácsadói díjak"),
+    PURCHASE("Beszerzés", true),
+    MARKETING("Marketing", true),
+    SUBSCRIPTION("Szoftver előfizetés", true),
+    MAINTENANCE("Karbantartás", true),
+    PROFESSIONAL_FEES("Tanácsadói díjak", true),
 
     // ADMINISZTRATÍV
-    TAX("Adó"),
-    SOCIAL_SECURITY("Társadalombiztosítás"),
-    BANK_FEES("Bankköltség"),
-    TRAINING("Továbbképzés"),
+    TAX("Adó", true),
+    SOCIAL_SECURITY("Társadalombiztosítás", true),
+    BANK_FEES("Bankköltség", true),
+    TRAINING("Továbbképzés", true),
 
     // EGYÉB
-    OTHER_INCOME("Egyéb bevétel"),
-    OTHER_EXPENSE("Egyéb kiadás");
+    OTHER_INCOME("Egyéb bevétel", false),
+    OTHER_EXPENSE("Egyéb kiadás", true);
 
     private final String displayName;
+    private final boolean isExpense;
 }
