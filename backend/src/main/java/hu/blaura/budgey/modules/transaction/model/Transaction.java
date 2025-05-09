@@ -1,6 +1,5 @@
 package hu.blaura.budgey.modules.transaction.model;
 
-import hu.blaura.budgey.modules.classification.model.Classification;
 import hu.blaura.budgey.modules.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

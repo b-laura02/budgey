@@ -63,7 +63,7 @@ export class StatementsComponent {
         return `${new Date(item.fromDate).toLocaleDateString('hu-HU', { month: 'short', day: 'numeric' })} - ${new Date(item.toDate).toLocaleDateString('hu-HU', { month: 'short', day: 'numeric' })}`;
       }),
       income: reversedData.map(item => item.income),
-      expense: reversedData.map(item => item.expense),
+      expense: reversedData.map(item => Math.abs(item.expense)),
       profit: reversedData.map(item => item.profit)
     };
   }

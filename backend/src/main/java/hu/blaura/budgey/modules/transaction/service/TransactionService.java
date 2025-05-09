@@ -101,8 +101,19 @@ public class TransactionService {
             }
             Date endOfPeriod = calendar.getTime();
 
-            List<Transaction> periodTransactions = getTransactionsBetweenDates(startOfPeriod, endOfPeriod, user);
-            summaries.add(calculateSummary(periodTransactions, startOfPeriod, endOfPeriod));
+            double income = transactionRepository.sumIncomeByUserAndDateBetween(
+                    user,
+                    ISO_DATE_FORMAT.format(startOfPeriod),
+                    ISO_DATE_FORMAT.format(endOfPeriod)
+            ).orElse(0.0);
+
+            double expense = transactionRepository.sumExpenseByUserAndDateBetween(
+                    user,
+                    ISO_DATE_FORMAT.format(startOfPeriod),
+                    ISO_DATE_FORMAT.format(endOfPeriod)
+            ).orElse(0.0);
+
+            summaries.add(calculateSummary(income, expense, startOfPeriod, endOfPeriod));
 
             // Visszamegyunk egy periodust
             calendar.setTime(startOfPeriod);
@@ -130,18 +141,8 @@ public class TransactionService {
         );
     }
 
-    private SummaryDto calculateSummary(List<Transaction> transactions, Date fromDate, Date toDate) {
-        double income = transactions.stream()
-                .filter(t -> t.getAmount() > 0)
-                .mapToDouble(Transaction::getAmount)
-                .sum();
-
-        double expense = transactions.stream()
-                .filter(t -> t.getAmount() < 0)
-                .mapToDouble(t -> Math.abs(t.getAmount()))
-                .sum();
-
-        double profit = income - expense;
+    private SummaryDto calculateSummary(double income, double expense, Date fromDate, Date toDate) {
+        double profit = income - Math.abs(expense);
 
         String exportLink = String.format("/transaction/export?from=%s&to=%s",
                 ISO_DATE_FORMAT.format(fromDate),
@@ -149,5 +150,4 @@ public class TransactionService {
 
         return new SummaryDto(fromDate, toDate, income, expense, profit, exportLink);
     }
-
 }
