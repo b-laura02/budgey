@@ -45,8 +45,7 @@ public class TipService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final Gson gson = new Gson();
 
-//    @Scheduled(cron = "0 0 1 * * 1")
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 1 * * 1")
     @Transactional
     public void scheduleGenerate() {
         List<User> users = userService.findAll();
