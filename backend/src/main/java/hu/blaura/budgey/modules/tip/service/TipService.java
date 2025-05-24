@@ -13,11 +13,13 @@ import hu.blaura.budgey.modules.transaction.model.Transaction;
 import hu.blaura.budgey.modules.transaction.model.dto.SummaryDto;
 import hu.blaura.budgey.modules.transaction.service.TransactionService;
 import hu.blaura.budgey.modules.user.model.User;
+import hu.blaura.budgey.modules.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.huggingface.HuggingfaceChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
@@ -34,6 +36,7 @@ public class TipService {
     private final TipRepository tipRepository;
     private final TransactionService transactionService;
     private final PreferencesService preferencesService;
+    private final UserService userService;
     private final HuggingfaceChatModel chatModel;
     @Value("${spring.ai.huggingface.chat.api-key}")
     private String apiKey;
@@ -42,11 +45,18 @@ public class TipService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final Gson gson = new Gson();
 
-    // TODO: Cron job
+    @Scheduled(cron = "0 0 1 * * 1")
+    @Transactional
+    public void scheduleGenerate() {
+        List<User> users = userService.findAll();
+        users.forEach(this::generate);
+    }
+
     @Transactional
     public List<Tip> generate(
             User user
     ) {
+        System.out.println("Generating tips for " + user.getEmail());
         Date endDate = new Date();
 
         // 3 het kell, ezert visszalepunk 3 hetet a naptarban
@@ -62,12 +72,10 @@ public class TipService {
         final List<Tip> tips = new ArrayList<>();
         final boolean canUseAi = preferences.isAllowAIProcessing();
 
-        if (canUseAi) {
+        if (false) {
             final String aiHabitText = generateAIHabit(transactions);
-//            final String aiPredictionText = generateAIPrediction(transactions);
-//            final String aiAdviceText = generateAIAdvice(transactions);
-            final String aiPredictionText = "";
-            final String aiAdviceText = "";
+            final String aiPredictionText = generateAIPrediction(transactions);
+            final String aiAdviceText = generateAIAdvice(transactions);
 
             tips.addAll(processTextToTips(aiHabitText, aiPredictionText, aiAdviceText, true, user));
         }
@@ -79,6 +87,11 @@ public class TipService {
 
         deleteAll();
         tipRepository.saveAll(tips);
+
+        tips.forEach(tip -> {
+            System.out.println(tip.getType());
+            System.out.println(tip.getTitle());
+        });
 
         return tips;
     }
