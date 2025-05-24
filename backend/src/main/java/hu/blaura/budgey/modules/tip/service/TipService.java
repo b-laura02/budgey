@@ -45,7 +45,8 @@ public class TipService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final Gson gson = new Gson();
 
-    @Scheduled(cron = "0 0 1 * * 1")
+//    @Scheduled(cron = "0 0 1 * * 1")
+    @Scheduled(cron = "0 * * * * *")
     @Transactional
     public void scheduleGenerate() {
         List<User> users = userService.findAll();
@@ -85,7 +86,7 @@ public class TipService {
 
         tips.addAll(processTextToTips(habitText, predictionText, adviceText, false, user));
 
-        deleteAll();
+        deleteAll(user);
         tipRepository.saveAll(tips);
 
         tips.forEach(tip -> {
@@ -103,8 +104,8 @@ public class TipService {
 
     // Mielott legeneraljuk az uj tipeket a het elejen,
     // kitoroljuk az eddigi tippeket.
-    public void deleteAll() {
-        tipRepository.deleteAll();
+    public void deleteAll(User user) {
+        tipRepository.deleteAllByUser(user);
     }
 
     // https://docs.spring.io/spring-framework/reference/integration/rest-clients.html
