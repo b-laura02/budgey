@@ -72,7 +72,7 @@ public class TipService {
         final List<Tip> tips = new ArrayList<>();
         final boolean canUseAi = preferences.isAllowAIProcessing();
 
-        if (false) {
+        if (canUseAi) {
             final String aiHabitText = generateAIHabit(transactions);
             final String aiPredictionText = generateAIPrediction(transactions);
             final String aiAdviceText = generateAIAdvice(transactions);
